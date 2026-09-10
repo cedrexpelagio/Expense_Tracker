@@ -8,7 +8,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const expenseAmount = document.getElementById('expense-amount');
     const expenseCategory = document.getElementById('expense-category');
 
-    let expenses = [];
+    let expenses = [
+        { name: 'Morning Coffee', amount: '150', category: 'Food' },
+        { name: 'Bus Ride', amount: '30', category: 'Transportation' },
+        { name: 'Notebook', amount: '120', category: 'Utilities' }
+    ];
+
+    loadExpenses(expenses);
 
     function addExpense(expense) {
 
@@ -16,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         tr.innerHTML = `<td>${expense.name}</td>
                 <td><span class="badge badge-food">${expense.category}</span></td>
-                <td class="amount">${expense.amount}</td>
+                <td class="amount">&#x20B1;${expense.amount}</td>
                 <td class="actions">
                   <button type="button" class="btn btn-update">Update</button>
                   <button type="button" class="btn btn-delete">Delete</button>
@@ -26,15 +32,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
+    function loadExpenses (array){
+        array.forEach(item => addExpense(item));
+    }
+
     filterCategory.addEventListener('change', () => {
 
         expenseList.innerHTML = '';
 
         if (filterCategory.value == "all") {
-            expenses.forEach(expense => addExpense(expense));
+            loadExpenses(expenses);
         } else {
             const filtered = expenses.filter(expense => filterCategory.value == expense.category);
-            filtered.forEach(expense => addExpense(expense));
+            loadExpenses(filtered);
         }
 
 
