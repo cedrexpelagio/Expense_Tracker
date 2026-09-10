@@ -13,8 +13,15 @@ document.addEventListener("DOMContentLoaded", () => {
         { name: 'Bus Ride', amount: '30', category: 'Transportation' },
         { name: 'Notebook', amount: '120', category: 'Utilities' }
     ];
+    let totalExpenses = 0.00;
 
+    expenses.forEach(expense => updateTotal(parseFloat(expense.amount)));
     loadExpenses(expenses);
+
+    function updateTotal(amount) {
+        totalExpenses += amount;
+        totalAmount.textContent = totalExpenses.toFixed(2);
+    }
 
     function addExpense(expense) {
 
@@ -32,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-    function loadExpenses (array){
+    function loadExpenses(array) {
         array.forEach(item => addExpense(item));
     }
 
@@ -62,6 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         expenses.push(expense);
         addExpense(expense);
+        updateTotal(parseFloat(expense.amount));
 
         filterCategory.dispatchEvent(new Event('change'));
 
