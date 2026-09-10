@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expense Tracker</title>
+  <!-- Google Fonts: Nunito for Duolingo-like typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <h1>Expense Tracker</h1>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-layout">
+      <!-- Left Column: Add Expense Form -->
+      <section class="card form-column">
+        <h2>Add Expense</h2>
+        <form id="expense-form">
+          <div class="form-group">
+            <label for="expense-name">Expense Name</label>
+            <input type="text" id="expense-name" name="name" placeholder="e.g., Grocery Store" required>
+          </div>
+
+          <div class="form-group">
+            <label for="expense-amount">Amount ($)</label>
+            <input type="number" id="expense-amount" name="amount" placeholder="0.00" step="0.01" min="0" required>
+          </div>
+
+          <div class="form-group">
+            <label for="expense-category">Category</label>
+            <select id="expense-category" name="category" required>
+              <option value="" disabled selected>Select Category</option>
+              <option value="Food">Food</option>
+              <option value="Transportation">Transportation</option>
+              <option value="Entertainment">Entertainment</option>
+              <option value="Utilities">Utilities</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <button type="submit" id="add-expense-btn" class="btn btn-primary">Add Expense</button>
+        </form>
+      </section>
+
+      <!-- Right Column: Filter, Total, & Expense List Table -->
+      <section class="card list-column">
+        <div class="toolbar">
+          <div class="filter-group">
+            <label for="filter-category">Filter:</label>
+            <select id="filter-category">
+              <option value="all">All Categories</option>
+              <option value="Food">Food</option>
+              <option value="Transportation">Transportation</option>
+              <option value="Entertainment">Entertainment</option>
+              <option value="Utilities">Utilities</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="total-display">
+            <span>Total Expense:</span>
+            <strong id="total-amount">$100.00</strong>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="expense-table" id="expense-table">
+            <thead>
+              <tr>
+                <th>Expense</th>
+                <th>Category</th>
+                <th>Amount</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="expense-list">
+              <!-- Sample 1 -->
+              <tr data-id="1" data-category="Food">
+                <td>Groceries</td>
+                <td><span class="badge badge-food">Food</span></td>
+                <td class="amount">$45.00</td>
+                <td class="actions">
+                  <button type="button" class="btn btn-update">Update</button>
+                  <button type="button" class="btn btn-delete">Delete</button>
+                </td>
+              </tr>
+              <!-- Sample 2 -->
+              <tr data-id="2" data-category="Transportation">
+                <td>Bus Pass</td>
+                <td><span class="badge badge-transportation">Transportation</span></td>
+                <td class="amount">$25.00</td>
+                <td class="actions">
+                  <button type="button" class="btn btn-update">Update</button>
+                  <button type="button" class="btn btn-delete">Delete</button>
+                </td>
+              </tr>
+              <!-- Sample 3 -->
+              <tr data-id="3" data-category="Entertainment">
+                <td>Movie Tickets</td>
+                <td><span class="badge badge-entertainment">Entertainment</span></td>
+                <td class="amount">$30.00</td>
+                <td class="actions">
+                  <button type="button" class="btn btn-update">Update</button>
+                  <button type="button" class="btn btn-delete">Delete</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>Manage your expenses strategically to build a secure financial future.</p>
+    </footer>
+  </div>
+
+  <script src="script.js" defer></script>
+</body>
+
+</html>
