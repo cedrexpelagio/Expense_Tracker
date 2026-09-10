@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         tr.innerHTML = `<td>${expense.name}</td>
                 <td><span class="badge badge-food">${expense.category}</span></td>
-                <td class="amount">${expense.category}</td>
+                <td class="amount">${expense.amount}</td>
                 <td class="actions">
                   <button type="button" class="btn btn-update">Update</button>
                   <button type="button" class="btn btn-delete">Delete</button>
@@ -25,6 +25,20 @@ document.addEventListener("DOMContentLoaded", () => {
         expenseList.appendChild(tr);
 
     }
+
+    filterCategory.addEventListener('change', () => {
+
+        expenseList.innerHTML = '';
+
+        if (filterCategory.value == "all") {
+            expenses.forEach(expense => addExpense(expense));
+        } else {
+            const filtered = expenses.filter(expense => filterCategory.value == expense.category);
+            filtered.forEach(expense => addExpense(expense));
+        }
+
+
+    });
 
     expenseForm.addEventListener('submit', (event) => {
 
@@ -38,6 +52,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         expenses.push(expense);
         addExpense(expense);
+
+        filterCategory.dispatchEvent(new Event('change'));
 
         expenseForm.reset();
     });
