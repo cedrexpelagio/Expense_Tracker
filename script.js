@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
         { name: 'Bus Ride', amount: '30', category: 'Transportation' },
         { name: 'Notebook', amount: '120', category: 'Utilities' }
     ];
+
     let totalExpenses = 0.00;
 
     expenses.forEach(expense => updateTotal(parseFloat(expense.amount)));
@@ -23,9 +24,11 @@ document.addEventListener("DOMContentLoaded", () => {
         totalAmount.textContent = totalExpenses.toFixed(2);
     }
 
-    function addExpense(expense) {
+    function addExpense(expense, index) {
 
         const tr = document.createElement('tr');
+
+        tr.dataset.index = index;
 
         tr.innerHTML = `<td>${expense.name}</td>
                 <td><span class="badge badge-food">${expense.category}</span></td>
@@ -35,17 +38,39 @@ document.addEventListener("DOMContentLoaded", () => {
                   <button type="button" class="btn btn-delete">Delete</button>
                 </td> `;
 
-        expenseList.appendChild(tr);
+        console.log(`Index of ${expense.name} is ${tr.dataset.index}`);
 
+        const updateBtn = tr.querySelector('.btn-update');
+        const deleteBtn = tr.querySelector('.btn-delete');
+
+        updateBtn.addEventListener('click', () => {
+            const clickedIndex = parseInt(tr.dataset.index, 10);
+            // your update logic here
+        });
+
+        deleteBtn.addEventListener('click', () => {
+            const clickedIndex = parseInt(tr.dataset.index, 10);
+
+            updateTotal(-1 * expenses[clickedIndex].amount);
+            expenses.splice(clickedIndex, 1);
+            tr.remove();
+            loadExpenses(expenses);
+        });
+
+        expenseList.appendChild(tr);
     }
 
     function loadExpenses(array) {
-        array.forEach(item => addExpense(item));
+
+        expenseList.innerHTML = '';
+
+        array.forEach(item => {
+            const realIndex = expenses.indexOf(item);
+            addExpense(item, realIndex);
+        });
     }
 
     filterCategory.addEventListener('change', () => {
-
-        expenseList.innerHTML = '';
 
         if (filterCategory.value == "all") {
             loadExpenses(expenses);
@@ -68,7 +93,11 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         expenses.push(expense);
-        addExpense(expense);
+
+        const index = expenses.indexOf(expense);
+
+        addExpense(expense, index);
+
         updateTotal(parseFloat(expense.amount));
 
         filterCategory.dispatchEvent(new Event('change'));
