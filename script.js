@@ -16,13 +16,104 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let totalExpenses = 0.00;
 
-    expenses.forEach(expense => updateTotal(parseFloat(expense.amount)));
     loadExpenses(expenses);
+    updateTotal();
 
-    function updateTotal(amount) {
-        totalExpenses += amount;
+    function disableBtn(buttons) {
+
+        buttons.forEach(btn => {
+            btn.disabled = true;
+            btn.style.opacity = "0.5";
+        });
+    }
+
+    function updateTotal() {
+        totalExpenses = expenses.reduce((total, expense) => total += parseFloat(expense.amount), 0);
         totalAmount.textContent = totalExpenses.toFixed(2);
     }
+
+    function deleteExpense(expense, index) {
+        expenses.splice(index, 1);
+        expense.remove();
+        updateTotal();
+        refreshList();
+    }
+
+    function refreshList() {
+        if (filterCategory.value === "all") {
+            loadExpenses(expenses);
+        } else {
+            const filtered = expenses.filter(expense => expense.category === filterCategory.value);
+            loadExpenses(filtered);
+        }
+    }
+
+    let submitBtnLocked = false;
+    let updateExpenseLocked = true;
+
+    function addActions(updateBtn, deleteBtn, expense) {
+
+        updateBtn.addEventListener('click', () => {
+            const clickedIndex = parseInt(expense.dataset.index, 10);
+
+            submitBtnLocked = true;
+            updateExpenseLocked = false;
+
+            let indexEditing = null;
+            indexEditing = clickedIndex;
+
+            expenseName.value = expenses[clickedIndex].name;
+            expenseAmount.value = expenses[clickedIndex].amount;
+            expenseCategory.value = expenses[clickedIndex].category;
+
+            expenseName.focus();
+
+            const allUpdateBtn = document.querySelectorAll('.btn-update');
+            disableBtn(allUpdateBtn);
+
+            const allDeleteBtn = document.querySelectorAll('.btn-delete');
+            disableBtn(allDeleteBtn);
+
+            deleteBtn.disabled = true;
+            deleteBtn.style.opacity = '0.5';
+
+            expenseForm.querySelector('button').textContent = "Update Expense";
+            document.querySelector('.form-column h2').textContent = "Update Expense";
+
+            expenseForm.addEventListener('submit', () => {
+
+                if (updateExpenseLocked) {
+                    return;
+                }
+
+                console.log(expenses);
+                console.log(indexEditing);
+
+                expenses[indexEditing].name = expenseName.value;
+                expenses[indexEditing].amount = expenseAmount.value;
+                expenses[indexEditing].category = expenseCategory.value;
+
+                indexEditing = null;
+                updateTotal();
+                refreshList();
+                expenseForm.reset();
+
+                updateExpenseLocked = true;
+                submitBtnLocked = false;
+
+                expenseForm.querySelector('button').textContent = "Add Expense";
+                document.querySelector('.form-column h2').textContent = "Add Expense";
+            });
+
+        });
+
+        deleteBtn.addEventListener('click', () => {
+            const clickedIndex = parseInt(expense.dataset.index, 10);
+
+            deleteExpense(expense, clickedIndex);
+        });
+    }
+
 
     function addExpense(expense, index) {
 
@@ -38,24 +129,10 @@ document.addEventListener("DOMContentLoaded", () => {
                   <button type="button" class="btn btn-delete">Delete</button>
                 </td> `;
 
-        console.log(`Index of ${expense.name} is ${tr.dataset.index}`);
-
         const updateBtn = tr.querySelector('.btn-update');
         const deleteBtn = tr.querySelector('.btn-delete');
 
-        updateBtn.addEventListener('click', () => {
-            const clickedIndex = parseInt(tr.dataset.index, 10);
-            // your update logic here
-        });
-
-        deleteBtn.addEventListener('click', () => {
-            const clickedIndex = parseInt(tr.dataset.index, 10);
-
-            updateTotal(-1 * expenses[clickedIndex].amount);
-            expenses.splice(clickedIndex, 1);
-            tr.remove();
-            loadExpenses(expenses);
-        });
+        addActions(updateBtn, deleteBtn, tr);
 
         expenseList.appendChild(tr);
     }
@@ -70,21 +147,15 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    filterCategory.addEventListener('change', () => {
-
-        if (filterCategory.value == "all") {
-            loadExpenses(expenses);
-        } else {
-            const filtered = expenses.filter(expense => filterCategory.value == expense.category);
-            loadExpenses(filtered);
-        }
-
-
-    });
+    filterCategory.addEventListener('change', refreshList);
 
     expenseForm.addEventListener('submit', (event) => {
 
         event.preventDefault();
+
+        if (submitBtnLocked) {
+            return;
+        }
 
         const expense = {
             name: expenseName.value,
@@ -98,7 +169,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         addExpense(expense, index);
 
-        updateTotal(parseFloat(expense.amount));
+        updateTotal();
 
         filterCategory.dispatchEvent(new Event('change'));
 
