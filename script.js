@@ -19,12 +19,29 @@ document.addEventListener("DOMContentLoaded", () => {
     loadExpenses(expenses);
     updateTotal();
 
-    function disableBtn(buttons) {
+    let isBtnsDisable = false;
 
-        buttons.forEach(btn => {
-            btn.disabled = true;
-            btn.style.opacity = "0.5";
-        });
+    function controlBtn(buttons) {
+
+        if (isBtnsDisable) {
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                btn.style.opacity = "0.5";
+            });
+        } else {
+            buttons.forEach(btn => {
+                btn.disabled = false;
+                btn.style.opacity = "1";
+            });
+        }
+    }
+
+    function controlBtns() {
+        const allUpdateBtn = document.querySelectorAll('.btn-update');
+        controlBtn(allUpdateBtn);
+
+        const allDeleteBtn = document.querySelectorAll('.btn-delete');
+        controlBtn(allDeleteBtn);
     }
 
     function updateTotal() {
@@ -40,12 +57,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function refreshList() {
+
         if (filterCategory.value === "all") {
             loadExpenses(expenses);
         } else {
             const filtered = expenses.filter(expense => expense.category === filterCategory.value);
             loadExpenses(filtered);
         }
+
+        controlBtns();
+
     }
 
     let submitBtnLocked = false;
@@ -68,14 +89,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             expenseName.focus();
 
-            const allUpdateBtn = document.querySelectorAll('.btn-update');
-            disableBtn(allUpdateBtn);
-
-            const allDeleteBtn = document.querySelectorAll('.btn-delete');
-            disableBtn(allDeleteBtn);
-
-            deleteBtn.disabled = true;
-            deleteBtn.style.opacity = '0.5';
+            isBtnsDisable = true;
+            controlBtns();
 
             expenseForm.querySelector('button').textContent = "Update Expense";
             document.querySelector('.form-column h2').textContent = "Update Expense";
@@ -93,6 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 expenses[indexEditing].amount = expenseAmount.value;
                 expenses[indexEditing].category = expenseCategory.value;
 
+                isBtnsDisable = false;
                 indexEditing = null;
                 updateTotal();
                 refreshList();
