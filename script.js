@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
         tr.dataset.index = index;
 
         tr.innerHTML = `<td>${expense.name}</td>
-                <td><span class="badge badge-food">${expense.category}</span></td>
+                <td><span class="badge badge-${expense.category.toLowerCase()}">${expense.category}</span></td>
                 <td class="amount">&#x20B1;${expense.amount}</td>
                 <td class="actions">
                   <button type="button" class="btn btn-update">Update</button>

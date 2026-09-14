@@ -285,6 +285,16 @@ select:focus {
   color: #ce82ff;
 }
 
+.badge-utilities {
+  background-color: #e5fdee;
+  color: #58cc02;
+}
+
+.badge-other {
+  background-color: #f0f0f0;
+  color: #777777;
+}
+
 /* Footer */
 .footer {
   text-align: center;
