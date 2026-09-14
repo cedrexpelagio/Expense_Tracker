@@ -69,8 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-    let submitBtnLocked = false;
-    let updateExpenseLocked = true;
+    let indexEditing = null;
 
     function addActions(updateBtn, deleteBtn, expense) {
 
@@ -80,7 +79,6 @@ document.addEventListener("DOMContentLoaded", () => {
             submitBtnLocked = true;
             updateExpenseLocked = false;
 
-            let indexEditing = null;
             indexEditing = clickedIndex;
 
             expenseName.value = expenses[clickedIndex].name;
@@ -94,33 +92,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             expenseForm.querySelector('button').textContent = "Update Expense";
             document.querySelector('.form-column h2').textContent = "Update Expense";
-
-            expenseForm.addEventListener('submit', () => {
-
-                if (updateExpenseLocked) {
-                    return;
-                }
-
-                console.log(expenses);
-                console.log(indexEditing);
-
-                expenses[indexEditing].name = expenseName.value;
-                expenses[indexEditing].amount = expenseAmount.value;
-                expenses[indexEditing].category = expenseCategory.value;
-
-                isBtnsDisable = false;
-                indexEditing = null;
-                updateTotal();
-                refreshList();
-                expenseForm.reset();
-
-                updateExpenseLocked = true;
-                submitBtnLocked = false;
-
-                expenseForm.querySelector('button').textContent = "Add Expense";
-                document.querySelector('.form-column h2').textContent = "Add Expense";
-            });
-
         });
 
         deleteBtn.addEventListener('click', () => {
@@ -166,29 +137,34 @@ document.addEventListener("DOMContentLoaded", () => {
     filterCategory.addEventListener('change', refreshList);
 
     expenseForm.addEventListener('submit', (event) => {
-
         event.preventDefault();
 
-        if (submitBtnLocked) {
-            return;
+        if (indexEditing !== null) {
+            // update path
+            expenses[indexEditing].name = expenseName.value;
+            expenses[indexEditing].amount = expenseAmount.value;
+            expenses[indexEditing].category = expenseCategory.value;
+
+            isBtnsDisable = false;
+            indexEditing = null;
+
+            expenseForm.querySelector('button').textContent = "Add Expense";
+            document.querySelector('.form-column h2').textContent = "Add Expense";
+        } else {
+            // add path
+            const expense = {
+                name: expenseName.value,
+                amount: expenseAmount.value,
+                category: expenseCategory.value
+            };
+
+            expenses.push(expense);
+            addExpense(expense, expenses.indexOf(expense));
         }
 
-        const expense = {
-            name: expenseName.value,
-            amount: expenseAmount.value,
-            category: expenseCategory.value
-        };
-
-        expenses.push(expense);
-
-        const index = expenses.indexOf(expense);
-
-        addExpense(expense, index);
-
         updateTotal();
-
-        filterCategory.dispatchEvent(new Event('change'));
-
+        refreshList();
         expenseForm.reset();
     });
+
 });
