@@ -8,6 +8,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const expenseAmount = document.getElementById('expense-amount');
     const expenseCategory = document.getElementById('expense-category');
 
+    const filterContainer = document.querySelector('.filter-group');
+
     let expenses = [
         { name: 'Morning Coffee', amount: '150', category: 'Food' },
         { name: 'Bus Ride', amount: '30', category: 'Transportation' },
@@ -56,17 +58,30 @@ document.addEventListener("DOMContentLoaded", () => {
         refreshList();
     }
 
+    function checkExpenseSize(array) {
+        if (array.length == 0) {
+            expenseList.innerHTML = 
+            `<td class="empty-message">
+            <span>No Expenses in this Category</span>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>`;
+        } else {
+            loadExpenses(array);
+        }
+    }
+
     function refreshList() {
 
         if (filterCategory.value === "all") {
-            loadExpenses(expenses);
+            checkExpenseSize(expenses);
         } else {
             const filtered = expenses.filter(expense => expense.category === filterCategory.value);
-            loadExpenses(filtered);
+            checkExpenseSize(filtered);
         }
 
         controlBtns();
-
     }
 
     let indexEditing = null;
@@ -75,9 +90,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         updateBtn.addEventListener('click', () => {
             const clickedIndex = parseInt(expense.dataset.index, 10);
-
-            submitBtnLocked = true;
-            updateExpenseLocked = false;
 
             indexEditing = clickedIndex;
 
@@ -134,7 +146,51 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    filterCategory.addEventListener('change', refreshList);
+    const addedCategory = document.getElementById('added-category');
+    const addedCategoryForm = document.querySelector('.add-category');
+    const addCategoryBtn = document.querySelector('.btn-add-category');
+
+    function showAddCategory() {
+
+        addedCategory.focus();
+
+        addedCategoryForm.classList.remove('hidden');
+        filterContainer.classList.add('hidden');
+
+    }
+
+    addedCategoryForm.addEventListener('submit', (event) => {
+
+        event.preventDefault();
+
+        const newCategoryValue = addedCategory.value.trim();
+        const newCategory = document.createElement('option');
+        newCategory.textContent = newCategoryValue;
+        newCategory.value = newCategoryValue;
+
+        const newOption = document.createElement('option');
+        newOption.textContent = newCategoryValue;
+        newOption.value = newCategoryValue;
+
+        filterCategory.appendChild(newCategory);
+
+        expenseCategory.appendChild(newOption);
+        expenseCategory.value = newCategoryValue;
+        expenseCategory.focus();
+
+        addedCategoryForm.reset();
+
+        addedCategoryForm.classList.add('hidden');
+        filterContainer.classList.remove('hidden');
+    });
+
+    addCategoryBtn.addEventListener('click', showAddCategory);
+
+    filterContainer.addEventListener('change', (event) => {
+        if (event.target.id === 'filter-category') {
+            refreshList();
+        }
+    });
 
     expenseForm.addEventListener('submit', (event) => {
         event.preventDefault();
