@@ -118,6 +118,11 @@ select:focus {
   border-color: var(--primary-color);
 }
 
+.form-group-buttons {
+  display: flex;
+  gap: 10px;
+}
+
 /* Buttons (Duolingo 3D button feel) */
 .btn {
   display: inline-flex;
@@ -155,7 +160,8 @@ select:focus {
 .btn-delete,
 .btn-add-category,
 .btn-submit-category,
-.btn-cancel {
+.btn-cancel, 
+.btn-update-cancel {
   color: #ffffff;
   padding: 6px 12px;
   font-size: 0.8rem;
@@ -167,7 +173,8 @@ select:focus {
 }
 
 .btn-delete,
-.btn-cancel {
+.btn-cancel, 
+.btn-update-cancel {
   background-color: var(--danger-color);
   box-shadow: 0 3px 0 var(--danger-dark);
 }
