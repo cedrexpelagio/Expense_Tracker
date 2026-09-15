@@ -61,12 +61,9 @@ document.addEventListener("DOMContentLoaded", () => {
     function checkExpenseSize(array) {
         if (array.length == 0) {
             expenseList.innerHTML =
-                `<td class="empty-message">
+            `<tr><td class="empty-message" colspan="4">
             <span>No Expenses in this Category</span>
-            </td>
-            <td></td>
-            <td></td>
-            <td></td>`;
+            </td></tr>`;
         } else {
             loadExpenses(array);
         }
@@ -213,7 +210,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         expenseForm.querySelector('button').textContent = "Add Expense";
         document.querySelector('.form-column h2').textContent = "Add Expense";
-        
+
         isBtnsDisable = false;
         controlBtns();
     });
@@ -244,7 +241,6 @@ document.addEventListener("DOMContentLoaded", () => {
             };
 
             expenses.push(expense);
-            addExpense(expense, expenses.indexOf(expense));
         }
 
         updateTotal();
