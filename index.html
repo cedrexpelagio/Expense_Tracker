@@ -64,7 +64,15 @@
               <option value="Utilities">Utilities</option>
               <option value="Other">Other</option>
             </select>
+            <button class="btn btn-add-category">Add Category</button>
           </div>
+
+          <form class="add-category hidden">
+            <label for="filter-category">Filter:</label>
+            <input type="text" id="added-category" placeholder="e.g., Projects" required>
+            <button type="submit" class="btn btn-submit-category">Submit</button>
+            <button type="button" class="btn btn-cancel">Cancel</button>
+          </form>
 
           <div class="total-display">
             <span>Total Expense:</span>
