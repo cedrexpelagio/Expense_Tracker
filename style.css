@@ -151,20 +151,31 @@ select:focus {
   background-color: var(--primary-hover);
 }
 
-.btn-update {
-  background-color: var(--secondary-color);
+.btn-update,
+.btn-delete,
+.btn-add-category,
+.btn-submit-category,
+.btn-cancel {
   color: #ffffff;
   padding: 6px 12px;
   font-size: 0.8rem;
+}
+
+.btn-update {
+  background-color: var(--secondary-color);
   box-shadow: 0 3px 0 var(--secondary-dark);
 }
 
-.btn-delete {
+.btn-delete,
+.btn-cancel {
   background-color: var(--danger-color);
-  color: #ffffff;
-  padding: 6px 12px;
-  font-size: 0.8rem;
   box-shadow: 0 3px 0 var(--danger-dark);
+}
+
+.btn-add-category,
+.btn-submit-category {
+  background-color: var(--primary-color);
+  box-shadow: 0 3px 0 var(--primary-dark);
 }
 
 /* Right Column: Toolbar & Table */
@@ -184,6 +195,7 @@ select:focus {
 }
 
 .filter-group {
+  flex: 1;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -195,12 +207,22 @@ select:focus {
   color: var(--text-muted);
 }
 
-.filter-group select {
+.filter-group select,
+.add-category input {
   padding: 8px 12px;
   font-size: 0.9rem;
 }
 
+.add-category {
+  flex: 1;
+}
+
+.add-category input {
+  width: 40%;
+}
+
 .total-display {
+  align-self: flex-start;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -220,6 +242,10 @@ select:focus {
   font-size: 1.25rem;
   font-weight: 800;
   color: var(--primary-dark);
+}
+
+.hidden {
+  display: none;
 }
 
 /* Table */
@@ -242,11 +268,17 @@ select:focus {
   border-bottom: 2px solid var(--border-color);
 }
 
-.expense-table td {
+.expense-table td,
+.empty-message {
   padding: 14px;
   border-bottom: 1px solid var(--border-color);
   font-weight: 600;
   vertical-align: middle;
+}
+
+.empty-message {
+  width: 100%;
+  text-align: center;
 }
 
 .expense-table .amount {
@@ -327,4 +359,5 @@ select:focus {
   .total-display {
     justify-content: space-between;
   }
+
 }
