@@ -149,13 +149,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const addedCategory = document.getElementById('added-category');
     const addedCategoryForm = document.querySelector('.add-category');
     const addCategoryBtn = document.querySelector('.btn-add-category');
+    const cancelBtn = document.querySelector('.btn-cancel');
 
-    function showAddCategory() {
+    function showAddCategory(show) {
 
+        if(show){
         addedCategory.focus();
 
         addedCategoryForm.classList.remove('hidden');
         filterContainer.classList.add('hidden');
+        } else {
+         addedCategoryForm.classList.add('hidden');
+        filterContainer.classList.remove('hidden');
+        }
 
     }
 
@@ -180,11 +186,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
         addedCategoryForm.reset();
 
-        addedCategoryForm.classList.add('hidden');
-        filterContainer.classList.remove('hidden');
+        showAddCategory(false);
     });
 
-    addCategoryBtn.addEventListener('click', showAddCategory);
+    addCategoryBtn.addEventListener('click', () => {
+        showAddCategory(true);
+    });
+
+    cancelBtn.addEventListener('click', ()=> {
+        showAddCategory(false);
+    });
 
     filterContainer.addEventListener('change', (event) => {
         if (event.target.id === 'filter-category') {
