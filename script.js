@@ -60,8 +60,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function checkExpenseSize(array) {
         if (array.length == 0) {
-            expenseList.innerHTML = 
-            `<td class="empty-message">
+            expenseList.innerHTML =
+                `<td class="empty-message">
             <span>No Expenses in this Category</span>
             </td>
             <td></td>
@@ -85,6 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     let indexEditing = null;
+    const updateCancelBtn = document.querySelector('.btn-update-cancel');
 
     function addActions(updateBtn, deleteBtn, expense) {
 
@@ -93,6 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             indexEditing = clickedIndex;
 
+            updateCancelBtn.classList.remove('hidden');
             expenseName.value = expenses[clickedIndex].name;
             expenseAmount.value = expenses[clickedIndex].amount;
             expenseCategory.value = expenses[clickedIndex].category;
@@ -153,14 +155,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function showAddCategory(show) {
 
-        if(show){
-        addedCategory.focus();
+        if (show) {
+            addedCategory.focus();
 
-        addedCategoryForm.classList.remove('hidden');
-        filterContainer.classList.add('hidden');
+            addedCategoryForm.classList.remove('hidden');
+            filterContainer.classList.add('hidden');
         } else {
-         addedCategoryForm.classList.add('hidden');
-        filterContainer.classList.remove('hidden');
+            addedCategoryForm.classList.add('hidden');
+            filterContainer.classList.remove('hidden');
         }
 
     }
@@ -193,7 +195,7 @@ document.addEventListener("DOMContentLoaded", () => {
         showAddCategory(true);
     });
 
-    cancelBtn.addEventListener('click', ()=> {
+    cancelBtn.addEventListener('click', () => {
         showAddCategory(false);
     });
 
@@ -203,11 +205,27 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    updateCancelBtn.addEventListener('click', () => {
+        indexEditing = null;
+
+        expenseForm.reset();
+        updateCancelBtn.classList.add('hidden');
+
+        expenseForm.querySelector('button').textContent = "Add Expense";
+        document.querySelector('.form-column h2').textContent = "Add Expense";
+        
+        isBtnsDisable = false;
+        controlBtns();
+    });
+
     expenseForm.addEventListener('submit', (event) => {
         event.preventDefault();
 
         if (indexEditing !== null) {
             // update path
+
+            updateCancelBtn.classList.add('hidden');
+
             expenses[indexEditing].name = expenseName.value;
             expenses[indexEditing].amount = expenseAmount.value;
             expenses[indexEditing].category = expenseCategory.value;
