@@ -9,17 +9,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const expenseCategory = document.getElementById('expense-category');
 
     const filterContainer = document.querySelector('.filter-group');
+    const defaultCategory = ["Food","Transportation","Entertainment"];
 
-    let expenses = [
-        { name: 'Morning Coffee', amount: '150', category: 'Food' },
-        { name: 'Bus Ride', amount: '30', category: 'Transportation' },
-        { name: 'Notebook', amount: '120', category: 'Utilities' }
-    ];
+    let expenses = JSON.parse(localStorage.getItem('expenses'));
+    let category = JSON.parse(localStorage.getItem('category'));
 
     let totalExpenses = 0.00;
-
-    loadExpenses(expenses);
-    updateTotal();
 
     let isBtnsDisable = false;
 
@@ -56,12 +51,13 @@ document.addEventListener("DOMContentLoaded", () => {
         expense.remove();
         updateTotal();
         refreshList();
+        localStorage.setItem('expenses', JSON.stringify(expenses));
     }
 
     function checkExpenseSize(array) {
         if (array.length == 0) {
             expenseList.innerHTML =
-            `<tr><td class="empty-message" colspan="4">
+                `<tr><td class="empty-message" colspan="4">
             <span>No Expenses in this Category</span>
             </td></tr>`;
         } else {
@@ -79,6 +75,21 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         controlBtns();
+    }
+
+    refreshList();
+
+    function createCategory(value) {
+        const optionFilter = document.createElement('option');
+        optionFilter.textContent = value;
+        optionFilter.value = value;
+
+        const optionSelect = document.createElement('option');
+        optionSelect.textContent = value;
+        optionSelect.value = value;
+
+        filterCategory.appendChild(optionFilter);
+        expenseCategory.appendChild(optionSelect);
     }
 
     let indexEditing = null;
@@ -145,6 +156,12 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    function loadCategory(array) {
+        array.forEach((item) => {
+            createCategory(item);
+        });
+    }
+
     const addedCategory = document.getElementById('added-category');
     const addedCategoryForm = document.querySelector('.add-category');
     const addCategoryBtn = document.querySelector('.btn-add-category');
@@ -169,21 +186,16 @@ document.addEventListener("DOMContentLoaded", () => {
         event.preventDefault();
 
         const newCategoryValue = addedCategory.value.trim();
-        const newCategory = document.createElement('option');
-        newCategory.textContent = newCategoryValue;
-        newCategory.value = newCategoryValue;
 
-        const newOption = document.createElement('option');
-        newOption.textContent = newCategoryValue;
-        newOption.value = newCategoryValue;
+        createCategory(newCategoryValue);
 
-        filterCategory.appendChild(newCategory);
-
-        expenseCategory.appendChild(newOption);
         expenseCategory.value = newCategoryValue;
         expenseCategory.focus();
 
         addedCategoryForm.reset();
+
+        category.push(newCategoryValue);
+        localStorage.setItem('category', JSON.stringify(category));
 
         showAddCategory(false);
     });
@@ -246,6 +258,12 @@ document.addEventListener("DOMContentLoaded", () => {
         updateTotal();
         refreshList();
         expenseForm.reset();
+        localStorage.setItem('expenses', JSON.stringify(expenses));
     });
+
+    loadCategory(defaultCategory);
+    loadCategory(category);
+    updateTotal();
+    refreshList();
 
 });
