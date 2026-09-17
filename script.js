@@ -9,10 +9,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const expenseCategory = document.getElementById('expense-category');
 
     const filterContainer = document.querySelector('.filter-group');
-    const defaultCategory = ["Food","Transportation","Entertainment"];
+    const defaultCategory = ["Food", "Transportation", "Entertainment"];
 
-    let expenses = JSON.parse(localStorage.getItem('expenses'));
-    let category = JSON.parse(localStorage.getItem('category'));
+    let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+    let category = JSON.parse(localStorage.getItem('category')) || [];
 
     let totalExpenses = 0.00;
 
@@ -76,8 +76,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         controlBtns();
     }
-
-    refreshList();
 
     function createCategory(value) {
         const optionFilter = document.createElement('option');
